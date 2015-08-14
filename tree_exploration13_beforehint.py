@@ -76,8 +76,8 @@ def count_relationships(treedict):
     current_max_depth = 0
     #run get parents only for childless bottom nodes 
     #loop through each node
-    if treedict[key][2] != '0':
-      continue
+    #if treedict[key][2] != '0':
+    #  continue
     current_max_depth = get_parents(key, treedict, 0)
     node_counter += 1
     if current_max_depth > max_depth:
