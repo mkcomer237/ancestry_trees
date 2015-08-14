@@ -2,7 +2,7 @@
 
 import sys
 import time
-import sql_odbc_range3 as sql
+import matrix_odbc_range3 as sql
 import pyodbc
 import itertools as it
 
@@ -22,13 +22,13 @@ class autoviv(dict):
 # import and format the data (created a nested dictionary): 
 # (This does load the dataset into memory)
 
-def import_file(starttree, endtree, server, days, dbname):
+def import_file(starttree, endtree):
 
-  treefile = sql.sql_tree_range(server, dbname, starttree, endtree, days)
+  treefile = sql.sql_tree_range(starttree, endtree)
   treedictnew = autoviv()
   
   for line in treefile:
-    treedictnew[str(line[0])][str(line[1])] = [str(line[2]), str(line[3]), str(line[4])]
+    treedictnew[str(line[0])][str(line[1])] = [str(line[2]), str(line[3]))]
   return treedictnew
 
 
@@ -97,13 +97,13 @@ def get_tree_depth(output):
 
 #run the full query for a single db
 
-def run_db(increment, last_tree, runs, server, days, dbname):
+def run_db(increment, last_tree, runs):
   iteration = 1
   tree = last_tree + increment
   #loop through importing sets of trees and pull incrementally from sql
   while iteration <= runs:
     #looptimestart = time.time()
-    treedict=import_file(last_tree, tree, server, days, dbname)
+    treedict=import_file(last_tree, tree)
     treedict
     #now loop through one tree at a time to calculate the max depth 
     for key in treedict.keys():
@@ -122,11 +122,10 @@ def run_db(increment, last_tree, runs, server, days, dbname):
 def main(): 
   timestart = time.time()
   print '\t'.join(["Tree", "Depth", "Bottom_Node", "Child_Nodes"])
-  tree = int(raw_input('Enter your treeid: '))
-  db = raw_input('Enter your DBid: ')
+
   #loop through the db slices
   # BatchSize, StartNode, Iterations, ServerName, DaysCutoff, DBName)
-  run_db(1, tree, 1, 'vdb_treedb' + str(db) + '_repl', 2000, 'TreeDB')
+  run_db(1000, 76063491, 3)
 
   timeend = time.time()
   print "total time: ", timeend - timestart
